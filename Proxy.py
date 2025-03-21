@@ -128,8 +128,9 @@ while True:
     # ProxyServer finds a cache hit
     # Send back response to client 
     # ~~~~ INSERT CODE ~~~~
-
-    clientSocket.sendall(cacheData)
+    #Need to transform the cacheData(list of string) into a byte string
+    cacheData=''.join(cacheData)
+    clientSocket.sendall(cacheData.encode())
 
     # ~~~~ END CODE INSERT ~~~~
     cacheFile.close()
@@ -166,7 +167,8 @@ while True:
       # originServerRequestHeader is the second line in the request
       # ~~~~ INSERT CODE ~~~~
 
-
+      originServerRequest=requestParts[0]+requestParts[1]+requestParts[2]
+      originServerRequestHeader=requestParts[3]+requestParts[4]
 
       # ~~~~ END CODE INSERT ~~~~
 
@@ -188,10 +190,21 @@ while True:
 
       # Get the response from the origin server
       # ~~~~ INSERT CODE ~~~~
+
+      response=b''
+      while True:
+        data=originServerSocket.recv(BUFFER_SIZE)
+        if not data:
+          break
+        response+=data
+
       # ~~~~ END CODE INSERT ~~~~
 
       # Send the response to the client
       # ~~~~ INSERT CODE ~~~~
+
+      clientSocket.sendall(response)
+
       # ~~~~ END CODE INSERT ~~~~
 
       # Create a new file in the cache for the requested file.
@@ -203,6 +216,9 @@ while True:
 
       # Save origin server response in the cache file
       # ~~~~ INSERT CODE ~~~~
+
+      cacheFile.write(response)
+
       # ~~~~ END CODE INSERT ~~~~
       cacheFile.close()
       print ('cache file closed')
