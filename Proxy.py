@@ -167,8 +167,8 @@ while True:
       # originServerRequestHeader is the second line in the request
       # ~~~~ INSERT CODE ~~~~
 
-      originServerRequest=requestParts[0]+requestParts[1]+requestParts[2]
-      originServerRequestHeader=requestParts[3]+requestParts[4]
+      originServerRequest=f"{requestParts[0]} {resource} {requestParts[2]}"
+      originServerRequestHeader=f"Host: {hostname}\r\n"
 
       # ~~~~ END CODE INSERT ~~~~
 
